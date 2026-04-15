@@ -7,399 +7,215 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --surface2: #f0ede8;
-    --border: rgba(0,0,0,0.10);
-    --border2: rgba(0,0,0,0.18);
-    --text: #1a1a18;
-    --text2: #5f5e5a;
-    --text3: #9a9890;
-    --blue: #185FA5;
-    --blue-light: #E6F1FB;
-    --blue-text: #0C447C;
-    --green: #3B6D11;
-    --green-light: #EAF3DE;
-    --amber: #854F0B;
-    --amber-light: #FAEEDA;
-    --red: #A32D2D;
-    --red-light: #FCEBEB;
-    --radius: 10px;
-    --radius-sm: 6px;
+    --bg: #f5f4f0; --surface: #ffffff; --surface2: #f0ede8;
+    --border: rgba(0,0,0,0.10); --border2: rgba(0,0,0,0.18);
+    --text: #1a1a18; --text2: #5f5e5a; --text3: #9a9890;
+    --blue: #185FA5; --blue-light: #E6F1FB; --blue-text: #0C447C;
+    --green: #3B6D11; --green-light: #EAF3DE; --red: #A32D2D; --red-light: #FCEBEB;
+    --radius: 10px; --radius-sm: 6px;
   }
-
-  body {
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 15px;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
-
-  header {
-    background: var(--surface);
-    border-bottom: 0.5px solid var(--border);
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .logo {
-    width: 36px; height: 36px;
-    background: var(--blue);
-    border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-  }
-  .logo svg { width: 20px; height: 20px; fill: #E6F1FB; }
-
-  header h1 { font-size: 16px; font-weight: 500; color: var(--text); }
-  header p { font-size: 12px; color: var(--text2); }
-
-  .main { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
-
-  .card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    margin-bottom: 14px;
-  }
-
-  .card-title {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 14px;
-  }
-
+  body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; }
+  header { background: var(--surface); border-bottom: 0.5px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 100; }
+  .logo { width: 36px; height: 36px; background: var(--blue); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+  .main { max-width: 950px; margin: 0 auto; padding: 24px 16px 60px; }
+  .card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; }
+  .card-title { font-size: 11px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 14px; }
   .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-
   label { font-size: 12px; color: var(--text2); display: block; margin-bottom: 4px; }
-
-  input[type=number], input[type=text] {
-    width: 100%;
-    padding: 7px 10px;
-    border: 0.5px solid var(--border2);
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    background: var(--surface);
-    color: var(--text);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  input[type=number]:focus, input[type=text]:focus {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 2px rgba(24,95,165,0.12);
-  }
-  input:disabled {
-    opacity: 0.38;
-    background: var(--surface2);
-  }
-
-  .well-header {
-    display: grid;
-    grid-template-columns: 30px 1.4fr 1fr 1fr 1fr 1fr 28px;
-    gap: 8px;
-    margin-bottom: 6px;
-  }
-  .well-header span {
-    font-size: 11px;
-    color: var(--text3);
-    padding: 0 2px;
-  }
-
-  .well-row {
-    display: grid;
-    grid-template-columns: 30px 1.4fr 1fr 1fr 1fr 1fr 28px;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 6px;
-  }
-
-  .well-num {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text2);
-    text-align: center;
-    line-height: 34px;
-  }
-
-  .btn-remove {
-    width: 28px; height: 34px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    color: var(--text3);
-    font-size: 15px;
-    border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: center;
-    transition: color 0.15s, background 0.15s;
-  }
-  .btn-remove:hover:not(:disabled) { color: var(--red); background: var(--red-light); }
-  .btn-remove:disabled { opacity: 0.25; cursor: default; }
-
-  .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-
-  .btn {
-    padding: 8px 16px;
-    border-radius: var(--radius-sm);
-    border: 0.5px solid var(--border2);
-    background: var(--surface);
-    cursor: pointer;
-    font-size: 13px;
-    color: var(--text);
-    transition: background 0.12s;
-  }
-  .btn:hover { background: var(--surface2); }
-
-  .btn-calc {
-    padding: 9px 28px;
-    background: var(--blue);
-    color: #E6F1FB;
-    border: none;
-    font-weight: 500;
-    font-size: 14px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-  .btn-calc:hover { background: var(--blue-text); }
-
-  .results-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    table-layout: fixed;
-  }
-  .results-table th {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text2);
-    text-align: left;
-    padding: 7px 10px;
-    border-bottom: 0.5px solid var(--border);
-    background: var(--surface2);
-  }
-  .results-table td {
-    padding: 8px 10px;
-    border-bottom: 0.5px solid var(--border);
-    color: var(--text);
-  }
-  .results-table tr:last-child td { border-bottom: none; }
-  .results-table tr:hover td { background: var(--surface2); }
-
-  .badge {
-    display: inline-block;
-    font-size: 11px;
-    padding: 3px 9px;
-    border-radius: var(--radius-sm);
-    font-weight: 500;
-  }
+  input { width: 100%; padding: 7px 10px; border: 0.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 13px; outline: none; }
+  .well-header, .well-row { display: grid; grid-template-columns: 30px 1.4fr 1fr 1fr 1fr 1fr 28px; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .well-header { font-size: 11px; color: var(--text3); }
+  .actions { display: flex; gap: 10px; margin-top: 12px; }
+  .btn { padding: 8px 16px; border-radius: var(--radius-sm); border: 0.5px solid var(--border2); background: var(--surface); cursor: pointer; font-size: 13px; }
+  .btn-calc { background: var(--blue); color: white; border: none; font-weight: 500; }
+  .results-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; }
+  .results-table th { background: var(--surface2); padding: 8px; text-align: left; font-size: 11px; }
+  .results-table td { padding: 8px; border-bottom: 0.5px solid var(--border); }
+  .badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
   .badge-ok { background: var(--green-light); color: var(--green); }
-  .badge-warn { background: var(--amber-light); color: var(--amber); }
-  .badge-danger { background: var(--red-light); color: var(--red); }
-
-  .legend-row {
-    display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap;
-    font-size: 12px; color: var(--text2);
-  }
-  .legend-item { display: flex; align-items: center; gap: 6px; }
-
-  .divider { height: 0.5px; background: var(--border); margin: 14px 0; }
-
-  .chart-wrap { position: relative; width: 100%; height: 300px; }
-
-  .slope-note {
-    font-size: 11px;
-    color: var(--text3);
-    margin-top: 3px;
-    padding-left: 2px;
-  }
-
-  .formula-box {
-    background: var(--surface2);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    font-size: 12px;
-    color: var(--text2);
-    margin-bottom: 14px;
-    line-height: 1.8;
-  }
-  .formula-box code {
-    font-family: 'Consolas', 'Courier New', monospace;
-    color: var(--blue-text);
-    font-size: 12px;
-  }
-
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 10px;
-    margin-bottom: 14px;
-  }
-  .metric {
-    background: var(--surface2);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
-  }
-  .metric-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
-  .metric-value { font-size: 20px; font-weight: 500; color: var(--text); }
-  .metric-unit { font-size: 11px; color: var(--text3); margin-left: 2px; }
-
-  @media (max-width: 640px) {
-    .grid-3 { grid-template-columns: 1fr 1fr; }
-    .well-header, .well-row {
-      grid-template-columns: 24px 1fr 1fr 1fr;
-    }
-    .well-header span:nth-child(5),
-    .well-header span:nth-child(6),
-    .well-header span:nth-child(7),
-    .well-row > *:nth-child(5),
-    .well-row > *:nth-child(6),
-    .well-row > *:nth-child(7) { display: none; }
-    .summary-grid { grid-template-columns: 1fr 1fr; }
-    header h1 { font-size: 14px; }
-  }
-
-  @media print {
-    header { position: static; }
-    .actions { display: none; }
-    .btn-calc, .btn { display: none; }
-    body { background: white; }
-    .card { break-inside: avoid; }
-  }
+  .badge-warn { background: var(--red-light); color: var(--red); }
+  .chart-wrap { position: relative; width: 100%; height: 350px; margin-top: 20px; }
+  .metric { background: var(--surface2); padding: 10px; border-radius: 6px; }
+  .metric-label { font-size: 11px; color: var(--text2); }
+  .metric-value { font-size: 18px; font-weight: 600; }
+  @media print { .actions, .btn { display: none; } }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 18h18v2H3v-2zm0-7h2v5H3v-5zm4-3h2v8H7V8zm4-4h2v12h-2V4zm4 2h2v10h-2V6zm4 3h2v7h-2V9z"/>
-    </svg>
-  </div>
+  <div class="logo">W</div>
   <div>
     <h1>Бохир усны гадна шугам</h1>
-    <p>Суулгалтын гүний тооцоолуур · ф150мм</p>
+    <p>Урсгал Худаг-1 рүү (Downstream) чиглэсэн тооцоолол    Инженер Ш.Батсайхан    2026 он</p>
   </div>
 </header>
 
 <div class="main">
-
-  <!-- Ерөнхий тохиргоо -->
   <div class="card">
     <div class="card-title">Ерөнхий тохиргоо</div>
     <div class="grid-3">
       <div>
-        <label>1-р худгийн анхны гүн (м)</label>
-        <input type="number" id="initDepth" value="1.50" step="0.01" min="0.1">
+        <label>Худаг-1-ийн гүн (м)</label>
+        <input type="number" id="initDepth" value="1.50" step="0.01">
       </div>
       <div>
         <label>Хоолойн голч (мм)</label>
-        <input type="number" id="diameter" value="150" step="1" min="100">
+        <input type="number" id="diameter" value="150">
       </div>
       <div>
-        <label>Минимум налуу (i<sub>min</sub>)</label>
-        <input type="number" id="minSlope" value="0.007" step="0.001" min="0.001">
-        <div class="slope-note">Тэгш / эсрэг налуу газарт ашиглана</div>
+        <label>Минимум налуу (i_min)</label>
+        <input type="number" id="minSlope" value="0.007" step="0.001">
       </div>
     </div>
   </div>
 
-  <!-- Худгийн жагсаалт -->
   <div class="card">
-    <div class="card-title">Худгийн жагсаалт</div>
-
-    <div class="formula-box">
-      <strong>Томьёо:</strong><br>
-      <code>Инверт(n) = Инверт(n-1) − зай × налуу</code><br>
-      <code>Гүн(n) = Газрын ОТМ(n) − Инверт(n)</code><br>
-      Налуу: газрын налуу ≥ i<sub>min</sub> → газрын налуу; бусад → i<sub>min</sub>. Гараар бичвэл тэр утга ашиглана.
-    </div>
-
+    <div class="card-title">Худгийн жагсаалт (Урсгал: Х-3 → Х-2 → Х-1)</div>
     <div class="well-header">
-      <span></span>
-      <span>Нэр</span>
-      <span>Газрын ОТМ (м)</span>
-      <span>Зай (м)</span>
-      <span>Газрын налуу</span>
-      <span>Гараар налуу</span>
-      <span></span>
+      <span>#</span><span>Нэр</span><span>Газрын ОТМ (м)</span><span>Зай (м)</span><span>Газрын налуу</span><span>Гараар налуу</span><span></span>
     </div>
     <div id="wellsContainer"></div>
-
     <div class="actions">
       <button class="btn" onclick="addWell()">+ Худаг нэмэх</button>
-      <button class="btn-calc" onclick="calculate()">Тооцоолох</button>
-      <button class="btn" onclick="clearAll()" style="margin-left:auto; color: var(--text2);">Цэвэрлэх</button>
+      <button class="btn btn-calc" onclick="calculate()">Тооцоолох</button>
+      <button class="btn" onclick="clearAll()" style="margin-left:auto;">Цэвэрлэх</button>
     </div>
   </div>
 
-  <!-- Үр дүн -->
-  <div class="card" id="resultsSection" style="display:none;">
-    <div class="card-title">Тооцооны үр дүн</div>
+//   Худаг хооронд зай ба налуу тооцох Газрын налуу тооцох
 
-    <div class="summary-grid" id="summaryGrid"></div>
-
-    <div style="overflow-x:auto;">
-      <table class="results-table" id="resultsTable"></table>
+<div class="card" style="background: var(--blue-light); border-color: var(--blue);">
+    <div class="card-title" style="color: var(--blue-text); margin-bottom: 10px;">🛠 Шалгах тооцоолуур</div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 15px; align-items: flex-end;">
+        <div>
+            <label>Урт (м)</label>
+            <input type="number" id="calcL" placeholder="Зай" oninput="quickCalc()">
+        </div>
+        <div>
+            <label>Налуу (i)</label>
+            <input type="number" id="calcI" placeholder="0.007" step="0.001" oninput="quickCalc()">
+        </div>
+        <div>
+            <label>Өндрийн зөрүү (h)</label>
+            <div id="calcH" style="padding: 7px 0; font-size: 15px; font-weight: 700; color: var(--blue-text);">0.000 м</div>
+        </div>
+        
+        <div style="border-left: 1px solid var(--border2); padding-left: 15px;">
+            <label>Газрын ОТM-үүд (Зөрүү)</label>
+            <div style="display: flex; gap: 5px;">
+                <input type="number" id="gOTM1" placeholder="Дээд" oninput="groundSlopeCalc()" style="font-size: 11px;">
+                <input type="number" id="gOTM2" placeholder="Доод" oninput="groundSlopeCalc()" style="font-size: 11px;">
+            </div>
+            <div id="resGS" style="margin-top: 5px; font-size: 13px; font-weight: 700; color: var(--green);">i_газар: 0.0000</div>
+        </div>
     </div>
-
-    <div class="divider"></div>
-    <div class="legend-row">
-      <div class="legend-item"><span class="badge badge-ok">Зөв</span> 0.7 – 6.0 м</div>
-      <div class="legend-item"><span class="badge badge-warn">Өвч</span> &lt; 0.7 м</div>
-      <div class="legend-item"><span class="badge badge-danger">Хэт гүн</span> &gt; 6.0 м</div>
-    </div>
-
-    <div class="divider"></div>
-
-    <div style="font-size:12px; color:var(--text2); margin-bottom:10px; font-weight:500;">Профайл диаграм</div>
-    <div class="chart-wrap">
-      <canvas id="profileChart" role="img" aria-label="Шугамын гүний профайл"></canvas>
-    </div>
-    <div class="legend-row" style="margin-top:8px;">
-      <div class="legend-item">
-        <svg width="24" height="3"><line x1="0" y1="1.5" x2="24" y2="1.5" stroke="#888780" stroke-width="2" stroke-dasharray="5,3"/></svg>
-        Газрын ОТМ
-      </div>
-      <div class="legend-item">
-        <svg width="24" height="3"><line x1="0" y1="1.5" x2="24" y2="1.5" stroke="#185FA5" stroke-width="2.5"/></svg>
-        Инверт ОТМ (шугамын ёроол)
-      </div>
-    </div>
-
-    <div class="divider"></div>
-    <div class="actions">
-      <button class="btn" onclick="window.print()">Хэвлэх</button>
-    </div>
-  </div>
-
 </div>
 
 <script>
-let wells = [];
-let chartInst = null;
-
-function initWells() {
-  wells = [
-    { name: 'Худаг-1', otm: 1692.50, dist: 0,  manualSlope: '' },
-    { name: 'Худаг-2', otm: 1692.40, dist: 30, manualSlope: '' },
-    { name: 'Худаг-3', otm: 1692.20, dist: 35, manualSlope: '' },
-  ];
-  renderWells();
+// 1. Зай болон налуугаар өндөр бодох
+function quickCalc() {
+    const L = parseFloat(document.getElementById('calcL').value) || 0;
+    const i = parseFloat(document.getElementById('calcI').value) || 0;
+    const h = L * i;
+    document.getElementById('calcH').innerText = h.toFixed(3) + " м";
 }
+
+// 2. Хоёр тэмдэгт ба зайнаас газрын налуу бодох
+function groundSlopeCalc() {
+    const o1 = parseFloat(document.getElementById('gOTM1').value) || 0;
+    const o2 = parseFloat(document.getElementById('gOTM2').value) || 0;
+    const L = parseFloat(document.getElementById('calcL').value) || 0; // Дээрх "Урт" нүднээс зайг авна
+    
+    if (L > 0 && (o1 > 0 || o2 > 0)) {
+        const slope = Math.abs(o1 - o2) / L;
+        document.getElementById('resGS').innerText = "i_газар: " + slope.toFixed(4);
+    } else {
+        document.getElementById('resGS').innerText = "i_газар: 0.0000";
+    }
+}
+</script>
+
+
+
+
+''   ЭНД бас
+
+
+<div class="card" style="background: #fdfdfd; border: 1px solid var(--border2);">
+    <div class="card-title" style="color: var(--amber);">📉 Газрын налуу бодох ((OTM1 - OTM2) / L)</div>
+    <div style="display: grid; grid-template-columns: 1.2fr 1.2fr 1fr 1fr; gap: 12px; align-items: flex-end;">
+        <div>
+            <label>Дээд газрын тэмдэгт (м)</label>
+            <input type="number" id="gUp" placeholder="Жишээ: 1120.5" oninput="manualGroundSlope()">
+        </div>
+        <div>
+            <label>Доод газрын тэмдэгт (м)</label>
+            <input type="number" id="gDown" placeholder="Жишээ: 1118.2" oninput="manualGroundSlope()">
+        </div>
+        <div>
+            <label>Хоорондох зай (м)</label>
+            <input type="number" id="gDist" placeholder="Зай" oninput="manualGroundSlope()">
+        </div>
+        <div style="padding-bottom: 8px;">
+            <div style="font-size: 11px; color: var(--text2);">Бодогдсон налуу (i):</div>
+            <div id="manualGSResult" style="font-size: 16px; font-weight: 700; color: var(--amber);">0.0000</div>
+        </div>
+    </div>
+</div>
+
+<script>
+function manualGroundSlope() {
+    const up = parseFloat(document.getElementById('gUp').value) || 0;
+    const down = parseFloat(document.getElementById('gDown').value) || 0;
+    const dist = parseFloat(document.getElementById('gDist').value) || 0;
+    
+    if (dist > 0) {
+        // Газрын налууг (Өндрийн зөрүү / Зай) томьёогоор бодно
+        const slope = (up - down) / dist;
+        document.getElementById('manualGSResult').innerText = slope.toFixed(4);
+    } else {
+        document.getElementById('manualGSResult').innerText = "0.0000";
+    }
+}
+</script>
+
+
+
+
+
+'' https://www.facebook.com/shar.batsaikhan
+
+
+
+
+
+
+  <div class="card" id="resultsSection" style="display:none;">
+    <div class="card-title">Тооцооны үр дүн</div>
+    <div class="grid-3" id="summaryGrid" style="margin-bottom: 15px;"></div>
+    <div style="overflow-x:auto;">
+      <table class="results-table" id="resultsTable"></table>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="profileChart"></canvas>
+    </div>
+    <div class="actions">
+      <button class="btn" onclick="downloadAutoCADScript()" style="background:var(--green); color:white; border:none;">AutoCAD Скрипт (.scr)</button>
+      <button class="btn" onclick="window.print()">Хэвлэх</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let wells = [
+  { name: 'Худаг-1', otm: 1692.50, dist: 0, manualSlope: '' },
+  { name: 'Худаг-2', otm: 1692.40, dist: 30, manualSlope: '' },
+  { name: 'Худаг-3', otm: 1692.20, dist: 35, manualSlope: '' }
+];
+let chartInst = null;
+let lastResults = [];
 
 function renderWells() {
   const c = document.getElementById('wellsContainer');
@@ -407,223 +223,121 @@ function renderWells() {
   wells.forEach((w, i) => {
     const row = document.createElement('div');
     row.className = 'well-row';
-
-    // ground slope display
-    let gsText = '—';
-    if (i > 0) {
-      const prev = wells[i-1];
-      const dist = parseFloat(w.dist) || 0;
-      if (dist > 0) {
-        const gs = (parseFloat(prev.otm) - parseFloat(w.otm)) / dist;
-        gsText = gs.toFixed(4);
-      }
-    }
-
+    let gs = i === 0 ? '—' : ((w.otm - wells[i-1].otm) / w.dist).toFixed(4);
     row.innerHTML = `
-      <div class="well-num">${i+1}</div>
-      <div><input type="text" value="${w.name}" onchange="wells[${i}].name=this.value"></div>
-      <div><input type="number" value="${w.otm}" step="0.01" onchange="wells[${i}].otm=parseFloat(this.value)||0; renderWells();"></div>
-      <div><input type="number" value="${i===0?'':w.dist}" step="0.5" min="0" ${i===0?'disabled':''} onchange="wells[${i}].dist=parseFloat(this.value)||0; renderWells();" placeholder="${i===0?'—':''}"></div>
-      <div><input type="text" value="${gsText}" disabled style="font-family:monospace;font-size:12px;"></div>
-      <div><input type="number" value="${w.manualSlope}" step="0.001" min="0" placeholder="авто" onchange="wells[${i}].manualSlope=this.value"></div>
-      <button class="btn-remove" onclick="removeWell(${i})" ${wells.length<=2?'disabled':''}>✕</button>
+      <div style="text-align:center;">${i+1}</div>
+      <input type="text" value="${w.name}" onchange="wells[${i}].name=this.value">
+      <input type="number" value="${w.otm}" step="0.01" onchange="wells[${i}].otm=parseFloat(this.value)||0; renderWells();">
+      <input type="number" value="${w.dist}" step="0.5" ${i===0?'disabled':''} onchange="wells[${i}].dist=parseFloat(this.value)||0; renderWells();">
+      <div style="font-size:11px; text-align:center; color:var(--text3);">${gs}</div>
+      <input type="number" value="${w.manualSlope}" step="0.001" placeholder="i_min" onchange="wells[${i}].manualSlope=this.value">
+      <button class="btn" onclick="removeWell(${i})" style="color:red; border:none; padding:0;">✕</button>
     `;
     c.appendChild(row);
   });
 }
 
 function addWell() {
-  const n = wells.length + 1;
-  const lastOtm = wells[wells.length-1].otm;
-  wells.push({ name: `Худаг-${n}`, otm: parseFloat(lastOtm) - 0.10, dist: 30, manualSlope: '' });
+  const last = wells[wells.length-1];
+  wells.push({ name: `Худаг-${wells.length+1}`, otm: last.otm - 0.1, dist: 30, manualSlope: '' });
   renderWells();
 }
 
-function removeWell(i) {
-  if (wells.length <= 2) return;
-  wells.splice(i, 1);
-  renderWells();
-}
-
-function clearAll() {
-  if (!confirm('Бүх өгөгдлийг арилгах уу?')) return;
-  wells = [
-    { name: 'Худаг-1', otm: 0, dist: 0, manualSlope: '' },
-    { name: 'Худаг-2', otm: 0, dist: 0, manualSlope: '' },
-  ];
-  renderWells();
-  document.getElementById('resultsSection').style.display = 'none';
-}
+function removeWell(i) { if (wells.length > 2) { wells.splice(i, 1); renderWells(); } }
 
 function calculate() {
   const initDepth = parseFloat(document.getElementById('initDepth').value) || 1.5;
-  const minSlope  = parseFloat(document.getElementById('minSlope').value)  || 0.007;
-
+  const minSlope = parseFloat(document.getElementById('minSlope').value) || 0.007;
   const results = [];
   let prevInvert = null;
 
   for (let i = 0; i < wells.length; i++) {
     const w = wells[i];
-    const otm = parseFloat(w.otm) || 0;
     let invert, usedSlope, depth;
 
     if (i === 0) {
-      invert    = otm - initDepth;
-      depth     = initDepth;
+      invert = w.otm - initDepth;
+      depth = initDepth;
       usedSlope = null;
     } else {
-      const dist    = parseFloat(w.dist) || 0;
-      const prevOtm = parseFloat(wells[i-1].otm) || 0;
-      const groundSlope = dist > 0 ? (prevOtm - otm) / dist : 0;
+      // ЛОГИК: Гараар налуу өгөөгүй бол minSlope ашиглана
+      usedSlope = (w.manualSlope !== '' && !isNaN(parseFloat(w.manualSlope))) 
+                  ? parseFloat(w.manualSlope) 
+                  : minSlope;
 
-      if (w.manualSlope !== '' && !isNaN(parseFloat(w.manualSlope))) {
-        usedSlope = parseFloat(w.manualSlope);
-      } else {
-        usedSlope = groundSlope >= minSlope ? groundSlope : minSlope;
-      }
-
-      // Шугам үргэлж доошоо нална: өмнөх инвертээс хасна
-      invert = prevInvert - (dist * usedSlope);
-      depth  = otm - invert;
+      // Урсгал Худаг-1 рүү тул дээшээ өгсөж тооцно
+      invert = prevInvert + (w.dist * usedSlope); 
+      depth = w.otm - invert;
     }
-
-    results.push({ name: w.name, otm, dist: i===0?0:parseFloat(w.dist)||0, slope: usedSlope, invert, depth });
+    results.push({ ...w, invert, slope: usedSlope, depth });
     prevInvert = invert;
   }
-
+  lastResults = results;
   showResults(results);
 }
 
-function badgeHtml(d) {
-  const v = d.toFixed(2) + ' м';
-  if (d < 0.7) return `<span class="badge badge-warn">${v} ⚠</span>`;
-  if (d > 6.0) return `<span class="badge badge-danger">${v} !</span>`;
-  return `<span class="badge badge-ok">${v}</span>`;
-}
-
 function showResults(results) {
-  const sec = document.getElementById('resultsSection');
-  sec.style.display = 'block';
-
-  // Summary metrics
-  const depths = results.map(r => r.depth);
-  const minD   = Math.min(...depths);
-  const maxD   = Math.max(...depths);
-  const totalL = results.reduce((s,r) => s + r.dist, 0);
-  const topD   = results[0].invert;
-  const botD   = results[results.length-1].invert;
+  document.getElementById('resultsSection').style.display = 'block';
+  const totalL = results.reduce((s, r) => s + r.dist, 0);
+  const minD = Math.min(...results.map(r => r.depth));
 
   document.getElementById('summaryGrid').innerHTML = `
-    <div class="metric"><div class="metric-label">Нийт урт</div><div class="metric-value">${totalL.toFixed(0)}<span class="metric-unit">м</span></div></div>
-    <div class="metric"><div class="metric-label">Хамгийн бага гүн</div><div class="metric-value">${minD.toFixed(2)}<span class="metric-unit">м</span></div></div>
-    <div class="metric"><div class="metric-label">Хамгийн их гүн</div><div class="metric-value">${maxD.toFixed(2)}<span class="metric-unit">м</span></div></div>
-    <div class="metric"><div class="metric-label">Инверт өөрчлөлт</div><div class="metric-value">${(topD - botD).toFixed(3)}<span class="metric-unit">м</span></div></div>
+    <div class="metric"><div class="metric-label">Нийт урт</div><div class="metric-value">${totalL.toFixed(1)}м</div></div>
+    <div class="metric"><div class="metric-label">Хамгийн бага гүн</div><div class="metric-value">${minD.toFixed(2)}м</div></div>
+    <div class="metric"><div class="metric-label">Худагны тоо</div><div class="metric-value">${results.length}ш</div></div>
   `;
 
-  // Table
   const tbl = document.getElementById('resultsTable');
-  let html = `<thead><tr>
-    <th style="width:14%">Худаг</th>
-    <th style="width:13%">Газрын ОТМ</th>
-    <th style="width:10%">Зай (м)</th>
-    <th style="width:11%">Налуу (i)</th>
-    <th style="width:15%">Инверт ОТМ</th>
-    <th style="width:14%">Суулгалтын гүн</th>
-    <th style="width:23%">Тайлбар</th>
-  </tr></thead><tbody>`;
-
-  results.forEach((r, i) => {
-    let note = '';
-    if (r.depth < 0.7) note = 'Хэт өвч — засах шаардлагатай';
-    else if (r.depth > 6.0) note = 'Хэт гүн — бэхэлгээ шаардлагатай';
-    html += `<tr>
-      <td style="font-weight:500;">${r.name}</td>
+  tbl.innerHTML = `<tr><th>Худаг</th><th>Газрын ОТМ</th><th>Зай (м)</th><th>Налуу (i)</th><th>Инверт ОТМ</th><th>Гүн</th></tr>`;
+  results.forEach(r => {
+    tbl.innerHTML += `<tr>
+      <td><b>${r.name}</b></td>
       <td>${r.otm.toFixed(2)}</td>
-      <td>${i===0?'—':r.dist.toFixed(1)}</td>
-      <td style="font-family:monospace;font-size:12px;">${r.slope===null?'—':r.slope.toFixed(4)}</td>
-      <td style="font-family:monospace;font-size:12px;">${r.invert.toFixed(3)}</td>
-      <td>${badgeHtml(r.depth)}</td>
-      <td style="font-size:12px;color:var(--text2);">${note}</td>
+      <td>${r.dist || '—'}</td>
+      <td style="color:var(--blue-text)">${r.slope ? r.slope.toFixed(4) : '—'}</td>
+      <td style="font-weight:600;">${r.invert.toFixed(3)}</td>
+      <td><span class="badge ${r.depth < 0.7 ? 'badge-warn' : 'badge-ok'}">${r.depth.toFixed(2)}м</span></td>
     </tr>`;
   });
-
-  html += '</tbody>';
-  tbl.innerHTML = html;
-
   drawProfile(results);
-  sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function drawProfile(results) {
-  const labels  = results.map(r => r.name);
-  const otmData = results.map(r => r.otm);
-  const invData = results.map(r => r.invert);
-
-  const allVals = [...otmData, ...invData];
-  const minVal  = Math.min(...allVals) - 0.3;
-  const maxVal  = Math.max(...allVals) + 0.3;
-
-  if (chartInst) { chartInst.destroy(); chartInst = null; }
-
-  chartInst = new Chart(document.getElementById('profileChart'), {
+  const ctx = document.getElementById('profileChart').getContext('2d');
+  if (chartInst) chartInst.destroy();
+  chartInst = new Chart(ctx, {
     type: 'line',
     data: {
-      labels,
+      labels: results.map(r => r.name),
       datasets: [
-        {
-          label: 'Газрын ОТМ',
-          data: otmData,
-          borderColor: '#888780',
-          borderWidth: 2,
-          borderDash: [5, 3],
-          pointRadius: 5,
-          pointBackgroundColor: '#888780',
-          tension: 0,
-          fill: false,
-        },
-        {
-          label: 'Инверт ОТМ',
-          data: invData,
-          borderColor: '#185FA5',
-          borderWidth: 2.5,
-          pointRadius: 5,
-          pointBackgroundColor: '#185FA5',
-          tension: 0,
-          fill: {
-            target: 0,
-            above: 'rgba(24,95,165,0.07)',
-          },
-        }
+        { label: 'Газар', data: results.map(r => r.otm), borderColor: '#888', borderDash: [5,5], fill: false },
+        { label: 'Шугам (Invert)', data: results.map(r => r.invert), borderColor: '#185FA5', backgroundColor: 'rgba(24,95,165,0.1)', fill: true, tension: 0 }
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(3)} м`
-          }
-        }
-      },
-      scales: {
-        y: {
-          min: minVal,
-          max: maxVal,
-          ticks: { callback: v => v.toFixed(2), font: { size: 11 }, color: '#888780' },
-          grid: { color: 'rgba(0,0,0,0.06)' }
-        },
-        x: {
-          ticks: { autoSkip: false, maxRotation: 20, font: { size: 11 }, color: '#888780' },
-          grid: { color: 'rgba(0,0,0,0.04)' }
-        }
-      }
-    }
+    options: { responsive: true, maintainAspectRatio: false }
   });
 }
 
-initWells();
+function downloadAutoCADScript() {
+  let script = "ZE\n_UCS _W\n";
+  let currentX = 0;
+  lastResults.forEach((r, i) => {
+    currentX += r.dist;
+    script += `_CIRCLE ${currentX},${r.invert} 0.15\n`;
+    script += `_TEXT ${currentX},${r.otm + 0.3} 0.2 0 ${r.name}\n`;
+    if (i > 0) {
+      script += `_LINE ${currentX - r.dist},${lastResults[i-1].invert} ${currentX},${r.invert}\n`;
+    }
+  });
+  const blob = new Blob([script], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = "profile.scr";
+  link.click();
+}
+
+function clearAll() { if (confirm('Арилгах уу?')) location.reload(); }
+renderWells();
 </script>
 </body>
 </html>
